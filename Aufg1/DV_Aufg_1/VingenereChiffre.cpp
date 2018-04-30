@@ -38,7 +38,7 @@ std::string encrypt(std::string key, std::string quad[]) {
 	std::string enc_str = "";
 	int index_key = 0;
 
-	for (unsigned index_data = 0; index_data < data.length(); ++index_data) {
+	for (unsigned index_data = 0; index_data < data.length()-1; ++index_data) {
 		if (data.at(index_data) == ' ') {
 			enc_str += ' ';
 		}
