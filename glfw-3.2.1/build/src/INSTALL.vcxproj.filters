@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Uni\Semester 4\Datenvisualisierung und GPU Computing\Datenvisualisierung-und-GPU-Computing\glfw-3.2.1\build\CMakeFiles\cc5656318b45d076b46b2e9c76df3374\INSTALL_force.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{884A11F8-8E7F-3B08-81AB-6601A0A17146}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
