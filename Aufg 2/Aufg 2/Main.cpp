@@ -1,12 +1,13 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <alglib\linalg.h>
 
 #include <iostream>
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
-void rotate(int position[3], float alpha);
-void tesselateHourGlass(int corners);
+float* rotate(float position[3], float alpha);
+float* tesselateHourGlass(int corners, int height);
 
 
 // settings
@@ -150,23 +151,22 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 	glViewport(0, 0, width, height);
 }
 
-void rotate(int position[3], float alpha) {
+float* rotate(float position[3], float alpha) {
 	//implementation missing
+	return ;
 }
 
-void tesselatHourGlass(int corners, int height) {
+float* tesselateHourGlass(int corners, int height) {
 	if (corners > 2 && corners < 50) {
-		int center[3] = { 0, 0, 0 };
-		int topCenter[3] = { 0, height, 0 };
-		int bottomCenter[3] = { 0, -height, 0 };
-		int firstTop[3] = { 0.5, height, 0 };
-		int firstBottom[3] = { 0.5, height, 0 };
+		float center[3] = { 0, 0, 0 };
+		float topCenter[3] = { 0, height, 0 };
+		float bottomCenter[3] = { 0, -height, 0 };
 		float alpha = 360 / corners;
 
-		int polygons[200][3]; //polygons that will be returned after tesselation
+		float polygons[200][3] = { 0 }; //polygons that will be returned after tesselation
 
-		int tempPosTop[3] = firstTop;
-		int tempPosBottom[3] = firstBottom;
+		int tempPosTop[3] = { 0.5, height, 0 };
+		int tempPosBottom[3] = { 0.5, height, 0 };
 		for (int i = 0; i < corners*12; i+=12) {
 			//adding the positions for the top part
 			polygons[i] = topCenter;

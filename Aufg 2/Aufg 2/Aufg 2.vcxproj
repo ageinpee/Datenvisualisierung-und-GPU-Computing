@@ -70,8 +70,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>C:\Uni\Semester 4\Datenvisualisierung und GPU Computing\Datenvisualisierung-und-GPU-Computing\Include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Uni\Semester 4\Datenvisualisierung und GPU Computing\Datenvisualisierung-und-GPU-Computing\Libraries;$(LibraryPath)</LibraryPath>
+    <IncludePath>D:\Uni\Semester 4\Datenvisualisierung-und-GPU-Computing\Include;C:\Uni\Semester 4\Datenvisualisierung und GPU Computing\Datenvisualisierung-und-GPU-Computing\Include;$(IncludePath)</IncludePath>
+    <LibraryPath>D:\Uni\Semester 4\Datenvisualisierung-und-GPU-Computing\Libraries;C:\Uni\Semester 4\Datenvisualisierung und GPU Computing\Datenvisualisierung-und-GPU-Computing\Libraries;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -122,7 +122,20 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\..\..\Uni\Semester 4\Datenvisualisierung und GPU Computing\Datenvisualisierung-und-GPU-Computing\glad.c" />
+    <ClCompile Include="alglibinternal.cpp" />
+    <ClCompile Include="alglibmisc.cpp" />
+    <ClCompile Include="ap.cpp" />
+    <ClCompile Include="dataanalysis.cpp" />
+    <ClCompile Include="diffequations.cpp" />
+    <ClCompile Include="fasttransforms.cpp" />
+    <ClCompile Include="integration.cpp" />
+    <ClCompile Include="interpolation.cpp" />
+    <ClCompile Include="linalg.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="optimization.cpp" />
+    <ClCompile Include="solvers.cpp" />
+    <ClCompile Include="specialfunctions.cpp" />
+    <ClCompile Include="statistics.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
