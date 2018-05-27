@@ -1,0 +1,11 @@
+﻿  Main.cpp
+c:\users\ricky\source\repos\aufg 2\aufg 2\main.cpp(154): error C2760: Syntaxfehler: unerwartetes Token "Konstante", erwartet wurde "ID-Ausdruck"
+c:\users\ricky\source\repos\aufg 2\aufg 2\main.cpp(154): error C2061: Syntaxfehler: Bezeichner "center"
+c:\users\ricky\source\repos\aufg 2\aufg 2\main.cpp(155): error C2760: Syntaxfehler: unerwartetes Token "Konstante", erwartet wurde "ID-Ausdruck"
+c:\users\ricky\source\repos\aufg 2\aufg 2\main.cpp(155): error C2061: Syntaxfehler: Bezeichner "topCenter"
+c:\users\ricky\source\repos\aufg 2\aufg 2\main.cpp(156): error C2760: Syntaxfehler: unerwartetes Token "Konstante", erwartet wurde "ID-Ausdruck"
+c:\users\ricky\source\repos\aufg 2\aufg 2\main.cpp(156): error C2061: Syntaxfehler: Bezeichner "bottomCenter"
+c:\users\ricky\source\repos\aufg 2\aufg 2\main.cpp(157): error C2760: Syntaxfehler: unerwartetes Token "Konstante", erwartet wurde "ID-Ausdruck"
+c:\users\ricky\source\repos\aufg 2\aufg 2\main.cpp(157): error C2061: Syntaxfehler: Bezeichner "firstTop"
+c:\users\ricky\source\repos\aufg 2\aufg 2\main.cpp(158): error C2760: Syntaxfehler: unerwartetes Token "Konstante", erwartet wurde "ID-Ausdruck"
+c:\users\ricky\source\repos\aufg 2\aufg 2\main.cpp(158): error C2061: Syntaxfehler: Bezeichner "firstBottom"
