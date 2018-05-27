@@ -1,13 +1,15 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <alglib\linalg.h>
+#include <vector>
+#include <list>
 
 #include <iostream>
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
-float* rotate(float position[3], float alpha);
-float* tesselateHourGlass(int corners, int height);
+std::vector<float> rotate(std::vector<float>, float alpha);
+std::list<std::vector<float>> tesselateHourGlass(int corners, float height);
 
 
 // settings
@@ -151,40 +153,45 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 	glViewport(0, 0, width, height);
 }
 
-float* rotate(float position[3], float alpha) {
+std::vector<float> rotate(std::vector<float> position, float alpha) {
 	//implementation missing
-	return ;
 }
 
-float* tesselateHourGlass(int corners, int height) {
+std::list<std::vector<float>> tesselateHourGlass(int corners, float height) {
 	if (corners > 2 && corners < 50) {
-		float center[3] = { 0, 0, 0 };
-		float topCenter[3] = { 0, height, 0 };
-		float bottomCenter[3] = { 0, -height, 0 };
-		float alpha = 360 / corners;
+		std::vector<float> center = { 0, 0, 0 };
+		std::vector<float> topCenter = { 0., height, 0 };
+		std::vector<float> bottomCenter = { 0, -height, 0 };
+		float alpha = float(360/corners);
 
-		float polygons[200][3] = { 0 }; //polygons that will be returned after tesselation
+		std::list<std::vector<float>> polygons; //polygons that will be returned after tesselation
 
-		int tempPosTop[3] = { 0.5, height, 0 };
-		int tempPosBottom[3] = { 0.5, height, 0 };
+		std::vector<float> tempPosTop = { 0.5, height, 0 };
+		std::vector<float> tempPosBottom = { 0.5, height, 0 };
+
 		for (int i = 0; i < corners*12; i+=12) {
 			//adding the positions for the top part
-			polygons[i] = topCenter;
-			polygons[i + 3] = center; 
-			polygons[i + 1] = tempPosTop;
-			polygons[i + 4] = tempPosTop;
+			std::vector<float> oldTempPosTop = tempPosTop;
 			tempPosTop = rotate(tempPosTop, alpha);
-			polygons[i + 2] = tempPosTop; 
-			polygons[i + 5] = tempPosTop; 
 
-			//adding the positions for the bottom part
-			polygons[i + 6] = bottomCenter; 
-			polygons[i + 9] = center; 
-			polygons[i + 7] = tempPosBottom;
-			polygons[i + 10] = tempPosBottom; 
+			polygons.push_back(topCenter);
+			polygons.push_back(oldTempPosTop);
+			polygons.push_back(tempPosTop);
+
+			polygons.push_back(center);
+			polygons.push_back(oldTempPosTop);
+			polygons.push_back(tempPosTop);
+			
+			std::vector<float> oldTempPosBottom = tempPosBottom;
 			tempPosBottom = rotate(tempPosBottom, alpha);
-			polygons[i + 8] = tempPosBottom;
-			polygons[i + 11] = tempPosBottom; 
+
+			polygons.push_back(bottomCenter);
+			polygons.push_back(oldTempPosBottom);
+			polygons.push_back(tempPosBottom);
+
+			polygons.push_back(center);
+			polygons.push_back(oldTempPosBottom);
+			polygons.push_back(tempPosBottom);
 		}
 		return polygons;
 	}
