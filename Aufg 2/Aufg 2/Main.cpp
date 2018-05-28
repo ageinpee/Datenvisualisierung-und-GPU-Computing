@@ -1,15 +1,17 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include <alglib\linalg.h>
 #include <vector>
 #include <list>
+#include <string>
+#include <glm/glm.hpp>
+#include <glm/gtx/string_cast.hpp>
 
 #include <iostream>
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
-std::vector<float> rotate(std::vector<float>, float alpha);
-std::list<std::vector<float>> tesselateHourGlass(int corners, float height);
+glm::vec4 rotate(glm::vec4 position, float alpha);
+std::vector<glm::vec4> tesselateHourGlass(int corners, float height);
 
 
 // settings
@@ -153,25 +155,30 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 	glViewport(0, 0, width, height);
 }
 
-std::vector<float> rotate(std::vector<float> position, float alpha) {
-	//implementation missing
+glm::vec4 rotate(glm::vec4 position, float alpha) {
+	glm::mat4 rotmat = glm::mat4( glm::cos(alpha),  0.0, glm::sin(alpha), 0.0, 
+								  0.0,			    1.0, 0.0,			  0.0, 
+								  -glm::sin(alpha), 0.0, glm::cos(alpha), 0.0, 
+								  0.0,				0.0, 0.0,			  1.0);
+	return position * rotmat;
 }
 
-std::list<std::vector<float>> tesselateHourGlass(int corners, float height) {
+std::vector<glm::vec4> tesselateHourGlass(int corners, float height) {
 	if (corners > 2 && corners < 50) {
-		std::vector<float> center = { 0, 0, 0 };
-		std::vector<float> topCenter = { 0., height, 0 };
-		std::vector<float> bottomCenter = { 0, -height, 0 };
+		glm::vec4 center = glm::vec4( 0.0, 0.0, 0.0, 0.0 );
+		glm::vec4 topCenter = glm::vec4( 0.0, height, 0.0, 0.0 );
+		glm::vec4 bottomCenter = glm::vec4( 0.0, -height, 0.0, 0.0);
 		float alpha = float(360/corners);
 
-		std::list<std::vector<float>> polygons; //polygons that will be returned after tesselation
+		std::vector<glm::vec4> polygons; //polygons that will be returned after tesselation
 
-		std::vector<float> tempPosTop = { 0.5, height, 0 };
-		std::vector<float> tempPosBottom = { 0.5, height, 0 };
+		glm::vec4 tempPosTop = glm::vec4( 0.5, height, 0.0, 0.0 );
+		glm::vec4 tempPosBottom = glm::vec4( 0.5, height, 0.0, 0.0 );
 
-		for (int i = 0; i < corners*12; i+=12) {
+		int i;
+		for (i = 0; i < corners; i++) {
 			//adding the positions for the top part
-			std::vector<float> oldTempPosTop = tempPosTop;
+			glm::vec4 oldTempPosTop = tempPosTop;
 			tempPosTop = rotate(tempPosTop, alpha);
 
 			polygons.push_back(topCenter);
@@ -182,7 +189,7 @@ std::list<std::vector<float>> tesselateHourGlass(int corners, float height) {
 			polygons.push_back(oldTempPosTop);
 			polygons.push_back(tempPosTop);
 			
-			std::vector<float> oldTempPosBottom = tempPosBottom;
+			glm::vec4 oldTempPosBottom = tempPosBottom;
 			tempPosBottom = rotate(tempPosBottom, alpha);
 
 			polygons.push_back(bottomCenter);
@@ -192,6 +199,10 @@ std::list<std::vector<float>> tesselateHourGlass(int corners, float height) {
 			polygons.push_back(center);
 			polygons.push_back(oldTempPosBottom);
 			polygons.push_back(tempPosBottom);
+		}
+		int j;
+		for (i = 0; i < corners; i++) {
+			std::cout << glm::to_string( polygons.at(i) ) << std::endl;
 		}
 		return polygons;
 	}
