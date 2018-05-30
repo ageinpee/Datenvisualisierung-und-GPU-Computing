@@ -22,4 +22,12 @@
       <Filter>Quelldateien</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="vertex_shader.txt">
+      <Filter>Quelldateien</Filter>
+    </Text>
+    <Text Include="fragment_shader.txt">
+      <Filter>Quelldateien</Filter>
+    </Text>
+  </ItemGroup>
 </Project>

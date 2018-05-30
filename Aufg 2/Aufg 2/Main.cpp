@@ -1,17 +1,19 @@
+#define GLM_ENABLE_EXPERIMENTAL
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <vector>
-#include <list>
 #include <string>
 #include <glm/glm.hpp>
 #include <glm/gtx/string_cast.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <LearnOpenGL/shader_m.h>
 
 #include <iostream>
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
 glm::vec4 rotate(glm::vec4 position, float alpha);
-std::vector<glm::vec4> tesselateHourGlass(int corners, float height);
+std::vector<glm::vec4> tesselateHourGlass(int corners, float height, float width);
 
 
 // settings
@@ -31,8 +33,8 @@ int main()
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // uncomment this statement to fix compilation on OS X
 #endif
 
-														 // glfw window creation
-														 // --------------------
+	// glfw window creation
+	// --------------------
 	GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Hello Glut", NULL, NULL);
 	if (window == NULL)
 	{
@@ -51,6 +53,88 @@ int main()
 		return -1;
 	}
 
+	glEnable(GL_DEPTH_TEST);   // Enable depth testing for z-culling
+	glDepthFunc(GL_LEQUAL);    // Set the type of depth-test
+
+	Shader ourShader("vertex_shader.txt", "fragment_shader.txt");
+
+	//create and link Shaders
+	//-----------------------
+	//int vertexShader;
+	//vertexShader = glCreateShader(GL_VERTEX_SHADER);
+	//glShaderSource(vertexShader, 1, &vertex_shader, NULL);
+	//glCompileShader(vertexShader);
+	//
+	//int success;
+	//char infoLog[512];
+	//glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
+	//if (!success) {
+	//	glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
+	//	std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
+	//}
+	//
+	//int fragmentShader;
+	//fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+	//glShaderSource(fragmentShader, 1, &fragment_shader, NULL);
+	//glCompileShader(fragmentShader);
+	//
+	//glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
+	//if (!success) {
+	//	glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
+	//	std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
+	//}
+	//
+	//int shaderProgram;
+	//shaderProgram = glCreateProgram();
+	//glAttachShader(shaderProgram, vertexShader);
+	//glAttachShader(shaderProgram, fragmentShader);
+	//glLinkProgram(shaderProgram);
+	//
+	//glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
+	//if (!success) {
+	//	glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
+	//	std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
+	//}
+	// delete old shaders
+	//-------------------
+	//glDeleteShader(vertexShader);
+	//glDeleteShader(fragmentShader);
+
+	// create vertice-array
+	// --------------------
+	std::vector<glm::vec4> vertList = tesselateHourGlass(6, 0.5, 0.5);
+	std::vector<float> verts;
+	int vecnum;
+
+	for (vecnum = 0; vecnum < vertList.size(); vecnum++) {
+		int coordnum;
+		for (coordnum = 0; coordnum < 3; coordnum++) {
+			verts.push_back(vertList[vecnum][coordnum]);
+			//verts[vecnum + coordnum] = float(vertList[vecnum][coordnum]);
+			std::cout << verts[vecnum + coordnum] << "   " << vecnum << std::endl;
+		}
+	}
+	float* vertices = verts.data();
+
+	//create and link Buffers
+	//-----------------------
+	unsigned int VBO, VAO;
+	glGenBuffers(1, &VBO);
+	glGenVertexArrays(1, &VAO);
+
+	glBindVertexArray(VAO);
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+	//initialize VertexAttributePointer
+	//---------------------------------
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
+
+	//activate shader
+	ourShader.use();
+
 	// render loop
 	// -----------
 	while (!glfwWindowShouldClose(window))
@@ -59,14 +143,31 @@ int main()
 		// -----
 		processInput(window);
 
-		// render
-		// ------
-		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
+		//render
+		//------
+		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		//glUseProgram(shaderProgram);
+
+		//activate shader
+		ourShader.use();
+
+		// create transformations
+		glm::mat4 view;
+		glm::mat4 projection;
+		projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+		view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+		// pass transformation matrices to the shader
+		ourShader.setMat4("projection", projection); // note: currently we set the projection matrix each frame, but since the projection matrix rarely changes it's often best practice to set it outside the main loop only once.
+		ourShader.setMat4("view", view);
+
+		glBindVertexArray(VAO);
+		glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices));
+		//std::cout << "looping" << std::endl;
 
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 		// -------------------------------------------------------------------------------
-
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
@@ -82,7 +183,11 @@ int main()
 // ---------------------------------------------------------------------------------------------------------
 void processInput(GLFWwindow *window)
 {
-	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+	if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS)
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	else if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS)
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	else if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
 	else if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
 		std::cout << "RIGHT ARROW" << std::endl;
@@ -163,17 +268,34 @@ glm::vec4 rotate(glm::vec4 position, float alpha) {
 	return position * rotmat;
 }
 
-std::vector<glm::vec4> tesselateHourGlass(int corners, float height) {
+
+
+
+
+
+
+// WICHTIG!!!!!!!!!!!!!
+// Offenbar sind die vertices schuld daran, dass nichts angezeigt wird. Am besten überarbeiten
+
+
+
+
+
+
+
+
+
+std::vector<glm::vec4> tesselateHourGlass(int corners, float height, float width) {
+	std::vector<glm::vec4> polygons; //polygons that will be returned after tesselation
+
 	if (corners > 2 && corners < 50) {
 		glm::vec4 center = glm::vec4( 0.0, 0.0, 0.0, 0.0 );
 		glm::vec4 topCenter = glm::vec4( 0.0, height, 0.0, 0.0 );
 		glm::vec4 bottomCenter = glm::vec4( 0.0, -height, 0.0, 0.0);
 		float alpha = float(360/corners);
 
-		std::vector<glm::vec4> polygons; //polygons that will be returned after tesselation
-
-		glm::vec4 tempPosTop = glm::vec4( 0.5, height, 0.0, 0.0 );
-		glm::vec4 tempPosBottom = glm::vec4( 0.5, height, 0.0, 0.0 );
+		glm::vec4 tempPosTop = glm::vec4( width, height, 0.0, 0.0 );
+		glm::vec4 tempPosBottom = glm::vec4( width, -height, 0.0, 0.0 );
 
 		int i;
 		for (i = 0; i < corners; i++) {
@@ -199,14 +321,16 @@ std::vector<glm::vec4> tesselateHourGlass(int corners, float height) {
 			polygons.push_back(center);
 			polygons.push_back(oldTempPosBottom);
 			polygons.push_back(tempPosBottom);
+			std::cout << "Lauf : " << i << std::endl;
 		}
 		int j;
-		for (i = 0; i < corners; i++) {
-			std::cout << glm::to_string( polygons.at(i) ) << std::endl;
+		for (j = 0; j < corners*4; j++) {
+			std::cout << glm::to_string( polygons.at(j) ) << "   " << j << std::endl;
 		}
 		return polygons;
 	}
 	else {
 		std::cout << "tesselation expects a number of corners between 2 and 50." << std::endl;
+		return polygons;
 	}
 }
