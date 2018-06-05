@@ -104,13 +104,13 @@ int main()
 	// --------------------
 	std::vector<glm::vec4> vertList = tesselateHourGlass(6, 0.5, 0.5);
 	std::vector<float> verts;
-	int vecnum;
 
+	int vecnum;
 	for (vecnum = 0; vecnum < vertList.size(); vecnum++) {
 		int coordnum;
 		for (coordnum = 0; coordnum < 3; coordnum++) {
 			verts.push_back(vertList[vecnum][coordnum]);
-			//verts[vecnum + coordnum] = float(vertList[vecnum][coordnum]);
+			verts[vecnum + coordnum] = float(vertList[vecnum][coordnum]);
 			std::cout << verts[vecnum + coordnum] << "   " << vecnum << std::endl;
 		}
 	}
@@ -119,8 +119,8 @@ int main()
 	//create and link Buffers
 	//-----------------------
 	unsigned int VBO, VAO;
-	glGenBuffers(1, &VBO);
 	glGenVertexArrays(1, &VAO);
+	glGenBuffers(1, &VBO);
 
 	glBindVertexArray(VAO);
 
@@ -163,7 +163,7 @@ int main()
 		ourShader.setMat4("view", view);
 
 		glBindVertexArray(VAO);
-		glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices));
+		glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices) / 3);
 		//std::cout << "looping" << std::endl;
 
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
@@ -183,10 +183,14 @@ int main()
 // ---------------------------------------------------------------------------------------------------------
 void processInput(GLFWwindow *window)
 {
-	if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS)
+	if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS) {
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	else if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS)
+		std::cout << "Polygons are rendered as lines now." << std::endl;
+	}
+	else if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS) {
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		std::cout << "Polygons are rendered as filled triangles now" << std::endl;
+	}
 	else if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
 	else if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
@@ -261,10 +265,11 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 }
 
 glm::vec4 rotate(glm::vec4 position, float alpha) {
-	glm::mat4 rotmat = glm::mat4( glm::cos(alpha),  0.0, glm::sin(alpha), 0.0, 
-								  0.0,			    1.0, 0.0,			  0.0, 
-								  -glm::sin(alpha), 0.0, glm::cos(alpha), 0.0, 
-								  0.0,				0.0, 0.0,			  1.0);
+
+	glm::mat4 rotmat = glm::mat4(glm::cos(alpha), 0.0, glm::sin(alpha), 0.0,
+		0.0, 1.0, 0.0, 0.0,
+		-glm::sin(alpha), 0.0, glm::cos(alpha), 0.0,
+		0.0, 0.0, 0.0, 1.0);
 	return position * rotmat;
 }
 
@@ -289,13 +294,13 @@ std::vector<glm::vec4> tesselateHourGlass(int corners, float height, float width
 	std::vector<glm::vec4> polygons; //polygons that will be returned after tesselation
 
 	if (corners > 2 && corners < 50) {
-		glm::vec4 center = glm::vec4( 0.0, 0.0, 0.0, 0.0 );
-		glm::vec4 topCenter = glm::vec4( 0.0, height, 0.0, 0.0 );
-		glm::vec4 bottomCenter = glm::vec4( 0.0, -height, 0.0, 0.0);
-		float alpha = float(360/corners);
+		glm::vec4 center = glm::vec4(0.0, 0.0, 0.0, 0.0);
+		glm::vec4 topCenter = glm::vec4(0.0, height, 0.0, 0.0);
+		glm::vec4 bottomCenter = glm::vec4(0.0, -height, 0.0, 0.0);
+		float alpha = float(360 / corners);
 
-		glm::vec4 tempPosTop = glm::vec4( width, height, 0.0, 0.0 );
-		glm::vec4 tempPosBottom = glm::vec4( width, -height, 0.0, 0.0 );
+		glm::vec4 tempPosTop = glm::vec4(width, height, 0.0, 0.0);
+		glm::vec4 tempPosBottom = glm::vec4(width, -height, 0.0, 0.0);
 
 		int i;
 		for (i = 0; i < corners; i++) {
@@ -310,7 +315,7 @@ std::vector<glm::vec4> tesselateHourGlass(int corners, float height, float width
 			polygons.push_back(center);
 			polygons.push_back(oldTempPosTop);
 			polygons.push_back(tempPosTop);
-			
+
 			glm::vec4 oldTempPosBottom = tempPosBottom;
 			tempPosBottom = rotate(tempPosBottom, alpha);
 
@@ -324,8 +329,8 @@ std::vector<glm::vec4> tesselateHourGlass(int corners, float height, float width
 			std::cout << "Lauf : " << i << std::endl;
 		}
 		int j;
-		for (j = 0; j < corners*4; j++) {
-			std::cout << glm::to_string( polygons.at(j) ) << "   " << j << std::endl;
+		for (j = 0; j < corners * 4; j++) {
+			std::cout << glm::to_string(polygons.at(j)) << "   " << j << std::endl;
 		}
 		return polygons;
 	}
