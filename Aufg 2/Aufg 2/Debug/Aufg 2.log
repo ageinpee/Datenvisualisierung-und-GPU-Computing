@@ -1,5 +1,5 @@
 ﻿  Main.cpp
 c:\uni\semester 4\datenvisualisierung und gpu computing\datenvisualisierung-und-gpu-computing\include\learnopengl\shader_m.h(53): warning C4101: "infoLog": Unreferenzierte lokale Variable
 c:\uni\semester 4\datenvisualisierung und gpu computing\datenvisualisierung-und-gpu-computing\include\learnopengl\shader_m.h(52): warning C4101: "success": Unreferenzierte lokale Variable
-c:\uni\semester 4\datenvisualisierung und gpu computing\datenvisualisierung-und-gpu-computing\aufg 2\aufg 2\main.cpp(109): warning C4018: "<": Konflikt zwischen "signed" und "unsigned"
+c:\uni\semester 4\datenvisualisierung und gpu computing\datenvisualisierung-und-gpu-computing\aufg 2\aufg 2\main.cpp(70): warning C4018: "<": Konflikt zwischen "signed" und "unsigned"
   Aufg 2.vcxproj -> C:\Uni\Semester 4\Datenvisualisierung und GPU Computing\Datenvisualisierung-und-GPU-Computing\Aufg 2\Debug\Aufg 2.exe

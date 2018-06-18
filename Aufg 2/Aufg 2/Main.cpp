@@ -53,52 +53,13 @@ int main()
 		return -1;
 	}
 
+	glEnable(GL_DEBUG_OUTPUT);
 	glEnable(GL_DEPTH_TEST);   // Enable depth testing for z-culling
 	glDepthFunc(GL_LEQUAL);    // Set the type of depth-test
 
+	// create shader
+	// -----------------------------------------------------------
 	Shader ourShader("vertex_shader.txt", "fragment_shader.txt");
-
-	//create and link Shaders
-	//-----------------------
-	//int vertexShader;
-	//vertexShader = glCreateShader(GL_VERTEX_SHADER);
-	//glShaderSource(vertexShader, 1, &vertex_shader, NULL);
-	//glCompileShader(vertexShader);
-	//
-	//int success;
-	//char infoLog[512];
-	//glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
-	//if (!success) {
-	//	glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
-	//	std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
-	//}
-	//
-	//int fragmentShader;
-	//fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-	//glShaderSource(fragmentShader, 1, &fragment_shader, NULL);
-	//glCompileShader(fragmentShader);
-	//
-	//glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
-	//if (!success) {
-	//	glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
-	//	std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
-	//}
-	//
-	//int shaderProgram;
-	//shaderProgram = glCreateProgram();
-	//glAttachShader(shaderProgram, vertexShader);
-	//glAttachShader(shaderProgram, fragmentShader);
-	//glLinkProgram(shaderProgram);
-	//
-	//glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
-	//if (!success) {
-	//	glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
-	//	std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
-	//}
-	// delete old shaders
-	//-------------------
-	//glDeleteShader(vertexShader);
-	//glDeleteShader(fragmentShader);
 
 	// create vertice-array
 	// --------------------
@@ -173,7 +134,7 @@ int main()
 		// -------------------------------------------------------------------------------
 
 		glfwSwapBuffers(window);
-		glfwPollEvents();
+		glfwPollEvents();	
 	}
 
 	// glfw: terminate, clearing all previously allocated GLFW resources.
