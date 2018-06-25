@@ -1,13 +1,16 @@
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+
 //#include <glad/glad.h>
 //#include <GLFW/glfw3.h>
 #include <string>
 #include <list>
 #include <iostream>
-//#include <bitmap_image.hpp>
+#include <stb_image_write.h>
 //#include <glm/glm.hpp>
 
 std::list<int> task3_1(int c);
 void print_task3_1(std::list<int> sol);
+void test3_2(int x, int y);
 
 int main()
 {
@@ -27,6 +30,11 @@ int main()
 		}
 	}
 	return 0;
+}
+
+void test3_2(int x, int y) 
+{
+	
 }
 
 std::list<int> task3_1(int c) 
