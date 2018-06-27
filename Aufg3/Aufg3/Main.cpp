@@ -8,14 +8,13 @@
 #include <cstdlib>
 #include <ctime>
 #include <iostream>
+#include "vector.h"
 //#include <stb_image_write.h>
-#include <glm/glm.hpp>
 
 std::list<int> task3_1(int c);
 void print_task3_1(std::list<int> sol);
 void task3_2(int x, int y);
 std::vector<int> gen_img(int x, int y);
-glm::dvec2 gen_vec(int xpos, int ypos, int xres, int yres);
 
 int main()
 {
@@ -45,25 +44,16 @@ int main()
 void task3_2(int xres, int yres) 
 {
 	std::vector<int> img = gen_img(xres, yres);
-	
+	VectorField vecs((double)xres, (double)yres);
+
 	for (std::vector<int>::iterator it = img.begin(); it != img.end(); it++) {
 		int xpos = std::distance(img.begin(), it) % xres;
 		int ypos = std::distance(img.begin(), it) / yres;
-		std::cout << xpos << ", " << ypos << std::endl;
-		std::cout << gen_vec(xpos, ypos, xres, yres)[0] << ", " << gen_vec(xpos, ypos, xres, yres)[1] << std::endl;
+
+		std::cout << vecs.vector_at(xpos, ypos).x << ", " << vecs.vector_at(xpos, ypos).y << std::endl;
+		
 	}
 }
-
-glm::dvec2 gen_vec(int xpos, int ypos, int xres, int yres)
-{
-	glm::dvec2 v1 = glm::dvec2(-(ypos - (2 / 8) * yres), xpos - (1 / 5) * xres);
-	glm::dvec2 v2 = glm::dvec2(ypos - (5 / 8) * yres, -(xpos - (7 / 10)*xres));
-	return ( ( (v1) / (glm::abs(v1)*glm::abs(v1)) ) + ( (v2) / (glm::abs(v2)*glm::abs(v2)) ) ) / 
-			glm::abs( ( (v1) / (glm::abs(v1)*glm::abs(v1)) ) + ( (v2) / (glm::abs(v2)*glm::abs(v2)) ) );
-	// IND means floating point exceeded
-	// check formula --> alternitives to glm?
-}
-
 
 std::vector<int> gen_img(int x, int y)
 {

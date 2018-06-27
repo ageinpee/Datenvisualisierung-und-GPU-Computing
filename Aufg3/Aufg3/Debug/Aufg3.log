@@ -1,3 +1,5 @@
 ﻿  Main.cpp
-d:\uni\semester 4\datenvisualisierung-und-gpu-computing\aufg3\aufg3\main.cpp(72): warning C4244: "Argument": Konvertierung von "time_t" in "unsigned int", möglicher Datenverlust
+d:\uni\semester 4\datenvisualisierung-und-gpu-computing\aufg3\aufg3\main.cpp(63): warning C4244: "Argument": Konvertierung von "time_t" in "unsigned int", möglicher Datenverlust
+  vector.cpp
+  Code wird generiert...
   Aufg3.vcxproj -> D:\Uni\Semester 4\Datenvisualisierung-und-GPU-Computing\Aufg3\Debug\Aufg3.exe
