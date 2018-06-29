@@ -9,12 +9,15 @@
 #include <ctime>
 #include <iostream>
 #include "vector.h"
-//#include <stb_image_write.h>
+#include mpi.h
+#include <stb_image_write.h>
 
 std::list<int> task3_1(int c);
 void print_task3_1(std::list<int> sol);
 void task3_2(int x, int y);
 std::vector<int> gen_img(int x, int y);
+void integrate(VectorField field, Vector start, int value, int visited, bool direction,
+	int xres, int yres, std::vector<int> img);
 
 int main()
 {
@@ -44,14 +47,48 @@ int main()
 void task3_2(int xres, int yres) 
 {
 	std::vector<int> img = gen_img(xres, yres);
+	std::vector<int> img_out = gen_img(xres, yres);
 	VectorField vecs((double)xres, (double)yres);
 
 	for (std::vector<int>::iterator it = img.begin(); it != img.end(); it++) {
 		int xpos = std::distance(img.begin(), it) % xres;
 		int ypos = std::distance(img.begin(), it) / yres;
 
-		std::cout << vecs.vector_at(xpos, ypos).x << ", " << vecs.vector_at(xpos, ypos).y << std::endl;
-		
+		//std::cout << vecs.vector_at(xpos, ypos).x << ", " << vecs.vector_at(xpos, ypos).y << std::endl;
+
+		int value = img[xres*xpos + ypos];
+		int visited = 1;
+		Vector start(xpos + 0.5, ypos + 0.5);
+
+		integrate(vecs, start, value, visited, true, //true = direction-->forward
+			xres, yres, img);
+		integrate(vecs, start, value, visited, false, //false = direction-->backwards
+			xres, yres, img);
+
+		//std::cout << img[*it] << ", " << value / visited << std::endl;
+		img_out[xres*xpos + ypos] = value / visited;
+	}
+	
+	std::string name = "LIC.bmp";
+	stbi_write_bmp(name.c_str(), xres, yres, 1, img_out.data());
+}
+
+void integrate(VectorField field, Vector start, int value, int visited, bool direction,
+				 int xres, int yres, std::vector<int> img) {
+	Vector current = start;
+
+	for (int i = 0; i < 50; i++) {
+		if (direction) {
+			current = current + field.vector_at(current).with_len(0.5);
+		}
+		else {
+			current = current - field.vector_at(current).with_len(0.5);
+		}
+	}
+
+	if (current.x >= 0 && current.x < xres && current.y >= 0 && current.y < yres) {
+		value += img[(xres-1)*current.x + current.y];
+		visited++;
 	}
 }
 
@@ -61,10 +98,10 @@ std::vector<int> gen_img(int x, int y)
 	img.assign(x*y, 0);
 
 	std::srand(std::time(0));
-	std::cout << x << ", " << y << ", " << img.size() << std::endl;
 
 	for (std::vector<int>::iterator it = img.begin(); it != img.end(); it++) {
-		int random = std::rand() % 2;
+		int random = (std::rand() % 2) * 255;
+		std::cout << random << std::endl;
 		*it = random;
 	}
 	return img;
